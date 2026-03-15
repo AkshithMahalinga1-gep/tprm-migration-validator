@@ -5,6 +5,6 @@ if not token.lower().startswith('bearer '):
     token = 'Bearer ' + token
 
 neo4j_api = {
-    "url": "https://leoaksuateu.gep.com/leo-storage-dataservice/api/v1/StorageService/Run",
+    "url": "https://leoaks.gep.com/leo-storage-dataservice/api/v1/StorageService/Run",
     "Authorization": token
 }

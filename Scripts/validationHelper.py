@@ -6,7 +6,7 @@ def validate_response_data(validation_logs, formExcel, matching_form_mongo, resp
     
     filtered_formResponse_Excel_rows = response_df_excel[
         (response_df_excel["Reference ID*"] == formExcel["Reference ID*"]) &
-        (response_df_excel["Form Recurrence ID*"] == formExcel["Form Recurrence ID*"])
+        (response_df_excel["Form Recurrence ID"] == formExcel["Form Recurrence ID"])
     ]
 
     # print("Form Mongo", matching_form_mongo)
@@ -33,10 +33,10 @@ def validate_response_data(validation_logs, formExcel, matching_form_mongo, resp
                 # Check questionnaireDetails and questions for matching conditions
                 for questionnaire_detail in form_response.get("questionnaireDetails", []):
                     for question in questionnaire_detail.get("questions", []):
-                        if (question.get("mappedQuestionId") == row["Question Number [QB Number]*"]):
+                        if (question.get("mappedQuestionId") == row["Question Number*"]):
                             if row["Response*"] not in question.get("responseValue", []):
                                 validation_logs["Form Response"].append({
-                                    "formRecurrenceId": row["Form Recurrence ID*"],
+                                    "formRecurrenceId": row["Form Recurrence ID"],
                                     "referenceId": row["Reference ID*"],
                                     "masterFormId": row["Master Form ID*"],
                                     "response": row["Response*"],
@@ -44,9 +44,6 @@ def validate_response_data(validation_logs, formExcel, matching_form_mongo, resp
                                     "mongoDetail": question,
                                 })
 
-    # Print the filtered rows
-    if filtered_formResponse_Excel_rows.empty:
-        print("Filtered Rows: No matching rows found. Please check the filtering criteria.")
   
     # Save validation_logs to a new JSON file
     # with open("validation_logs_output.json", "w", encoding="utf-8") as f:
